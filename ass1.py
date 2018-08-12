@@ -1,10 +1,11 @@
-import os
-from sense_hat import SenseHat
-import time
+#!/usr/bin/env python3
 import requests
 import json
- 
-ACCESS_TOKEN="o.ttZEWeo4DjElL6en6e9aBgY0dABbyxjK"
+import os
+from datetime import datetime
+from sense_hat import SenseHat
+
+ACCESS_TOKEN="o.9rpjP4gKMOcHyJhURQVMswfjq37U5WKl"
 
 def send_notification_via_pushbullet(title, body):
     """ Sending notification via pushbullet.
@@ -22,27 +23,22 @@ def send_notification_via_pushbullet(title, body):
     else:
         print('complete sending')
 
+# namaed of cpu temp
 def get_cpu_temp():
-  res = os.popen("vcgencmd measure_temp").readline()
-  t = float(res.replace("temp=","").replace("'C\n",""))
-  return(t)
-
+    res = os.popen("vcgencmd measure_temp").readline()
+    t = float(res.replace("temp=","").replace("'C\n",""))
+    return(t)
 
 sense = SenseHat()
+time = datetime.now().strftime("%H:%M")
+humidity = sense.get_humidity()
+temp = sense.get_temperature_from_humidity()
+temp_cpu = get_cpu_temp()
+#calculate the correct temperature
+temp_correct = temp - ((temp_cpu-temp)/1.5)
+#main function
+if temp_correct > 20:
+    ip_address = os.popen('hostname -I').read()
+    send_notification_via_pushbullet(ip_address, "Please bring your sweater")
 
-while True:
-  t = sense.get_temperature_from_humidity()
-  t_cpu = get_cpu_temp()
-  h = sense.get_humidity()
-  p = sense.get_pressure()
-
-  # calculates the real temperature compesating CPU heating
-  t_corr = t - ((t_cpu-t)/1.5)
-  
-  print("t=%.1f  t_cpu=%.1f  t_corr=%.1f  h=%d  p=%d" % (t, t_cpu, t_corr, round(h), round(p)))
-  
-  time.sleep(5)
-  if t_corr < 20:
-        ip_address = os.popen('hostname -I').read()
-        send_notification_via_pushbullet(ip_address, "Please bring your sweater!")
-
+#Execute
