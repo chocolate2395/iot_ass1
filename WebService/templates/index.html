@@ -3,9 +3,11 @@
 <html>
 
 <head>
-    <title>DHT Data Sensor</title>
+	<title>IoT_Ass1</title>
+<!--connect to the css-->
     <link rel="stylesheet" href='../static/style.css'/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- set the graph 1 and 2 loction adn size-->
     <style>
 		body {
 			text-align: center;
@@ -29,17 +31,20 @@
 	<hr>
 	<h3> HISTORICAL DATA </h3>
 		<p> Enter number of samples to retrieve:
+			<!-- reload the page and get the temp data up to date-->
 		<form method="POST">
 			<input name="numSamples" value= {{numSamples}}>
 			<input type="submit">
 		</form></p>
 		<hr>
+		<!--set the graph format and image size -->
 		<img src="/plot/temp" alt="Image Placeholder" width="49%">
 		<img src="/plot/humidity" alt="Image Placeholder" width="49%">
 	
-    
+    <!--javascript-->
     <script src="../static/raphael-2.1.4.min.js"></script>
-    <script src="../static/justgage.js"></script>
+	<script src="../static/justgage.js"></script>
+	<!--Created graph 1 and 2 and set the value to the graph-->
     <script>
 		var g1, g2;
 		document.addEventListener("DOMContentLoaded", function(event) {
@@ -53,6 +58,7 @@
 				title: "Temperature",
 				label: "Celcius"
 			});
+			
 			g2 = new JustGage({
 				id: "g2",
 				value: {{humidity}},

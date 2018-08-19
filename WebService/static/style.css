@@ -1,8 +1,9 @@
+/*set the web page blackground colour*/
 body{
-	background: blue;
-	color: yellow;
+	color: red;
 	padding:1%
 }
+/* set the button colour*/
 .button {
 	font: bold 15px Arial;
 	text-decoration: none;
@@ -15,5 +16,5 @@ body{
 	border-left: 1px solid #CCCCCC;
 }
 img{
-	display: display: inline-block
+	display: display: inline-block;
 }

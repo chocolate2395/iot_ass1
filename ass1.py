@@ -7,7 +7,8 @@ import sqlite3
 from sense_hat import SenseHat
 dbname='/home/pi/iot_ass/sensehat.db'
 
-ACCESS_TOKEN="o.9rpjP4gKMOcHyJhURQVMswfjq37U5WKl"
+# pushbullet account
+ACCESS_TOKEN="o.Ldyg8nLv3qxZEhsTXphQATTH79P5XVlP"
 
 def send_notification_via_pushbullet(title, body):
     """ Sending notification via pushbullet.
@@ -25,12 +26,13 @@ def send_notification_via_pushbullet(title, body):
     else:
         print('complete sending')
 
-# namaed of cpu temp
+# namaed of cpu temp and get cup temp
 def get_cpu_temp():
     res = os.popen("vcgencmd measure_temp").readline()
     t = float(res.replace("temp=","").replace("'C\n",""))
     return(t)
 
+#named of the function
 def set_temp():
     sense = SenseHat()
     time = datetime.now().strftime("%H:%M")
@@ -41,11 +43,11 @@ def set_temp():
     temp_correct = temp - ((temp_cpu-temp)/1.5)
     logData(temp_correct, humidity)
 
-
+# if temp lower then 20, it will send message via pushbullet to the user
     if temp_correct < 20:
         ip_address = os.popen('hostname -I').read()
         send_notification_via_pushbullet(ip_address, "Please bring your sweater")
-
+# set a data into database
 def logData(temp,humidity):
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
@@ -54,7 +56,7 @@ def logData(temp,humidity):
     conn.close()
 
     displayLog(temp)
-
+#show how many data and what date set into database.
 def displayLog(temp):
     conn=sqlite3.connect(dbname)
     curs=conn.cursor()
@@ -64,7 +66,7 @@ def displayLog(temp):
     conn.close()
 
     sense = SenseHat()
-
+#execute the function/
 def main():
     set_temp()
 main()
